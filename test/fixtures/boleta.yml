@@ -1,0 +1,19 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  comercio: MyString
+  rut_emisor: MyString
+  monto_total: 9.99
+  moneda: CLP
+  fecha: 2026-09-12
+  created_at: 2026-09-12 00:00:00
+  updated_at: 2026-09-12 00:00:00
+
+two:
+  comercio: MyString
+  rut_emisor: MyString
+  monto_total: 9.99
+  moneda: CLP
+  fecha: 2026-09-12
+  created_at: 2026-09-12 00:00:00
+  updated_at: 2026-09-12 00:00:00

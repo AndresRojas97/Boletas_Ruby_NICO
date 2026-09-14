@@ -1,0 +1,60 @@
+<h1>Subir y Procesar Boleta</h1>
+
+<% if @boleta.errors.any? %>
+  <div role="alert">
+    <strong>No se pudo procesar la boleta:</strong>
+    <ul>
+      <% @boleta.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+    </ul>
+  </div>
+<% end %>
+
+<% if @boleta.nil? || @boleta.new_record? %>
+  <!-- PASO 1: Formulario de subida -->
+  <p>Sube el archivo para que la IA extraiga los datos.</p>
+  
+  <%= form_with(model: Boleta.new, url: boletas_path, data: { turbo: false }, html: { multipart: true }) do |form| %>
+    <div style="margin-bottom: 20px;">
+      <%= form.label :archivo, "Selecciona Boleta (PDF o Imagen)" %><br><br>
+      <%= form.file_field :archivo, required: true %>
+    </div>
+    <div>
+      <%= form.submit "Procesar con IA" %>
+    </div>
+  <% end %>
+
+<% else %>
+  <!-- PASO 2: Formulario de revisión (se muestra tras procesar la IA) -->
+  <p>La IA extrajo la siguiente información. Revisa, corrige si es necesario y confirma.</p>
+  
+  <%= form_with(model: @boleta, url: boleta_path(@boleta), method: :patch, data: { turbo: false }) do |form| %>
+    <div style="margin-bottom: 10px;">
+      <%= form.label :comercio %><br>
+      <%= form.text_field :comercio %>
+    </div>
+    <div style="margin-bottom: 10px;">
+      <%= form.label :rut_emisor, "RUT Emisor" %><br>
+      <%= form.text_field :rut_emisor %>
+    </div>
+    <div style="margin-bottom: 10px;">
+      <%= form.label :monto_total %><br>
+      <%= form.number_field :monto_total %>
+    </div>
+    <div style="margin-bottom: 10px;">
+      <%= form.label :moneda, "Moneda" %><br>
+      <%= form.select :moneda, [["Peso chileno (CLP)", "CLP"], ["Dólar estadounidense (USD)", "USD"], ["Euro (EUR)", "EUR"]] %>
+    </div>
+    <div style="margin-bottom: 20px;">
+      <%= form.label :fecha %><br>
+      <%= form.date_field :fecha %>
+    </div>
+    <div>
+      <%= form.submit "Confirmar y Guardar" %>
+    </div>
+  <% end %>
+<% end %>
+
+<br><br>
+<%= link_to "Ver todas las boletas", boletas_path %>

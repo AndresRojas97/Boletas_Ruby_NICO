@@ -1,0 +1,19 @@
+<h1>Listado de Boletas Procesadas</h1>
+
+<%= link_to "Subir nueva boleta", new_boleta_path %>
+<%= button_to "Limpiar boletas incompletas", limpiar_incompletas_boletas_path, method: :delete,
+              form: { data: { turbo_confirm: "¿Eliminar todas las boletas sin datos completos?" } } %>
+<hr>
+
+<ul>
+  <% @boletas.each do |boleta| %>
+    <li>
+      <strong>Comercio:</strong> <%= boleta.comercio %> | 
+      <strong>RUT:</strong> <%= boleta.rut_emisor %> | 
+      <strong>Total:</strong> <%= formato_monto_boleta(boleta) %> (<%= boleta.moneda %>) | 
+      <strong>Fecha:</strong> <%= boleta.fecha %> |
+      <%= button_to "Eliminar", boleta_path(boleta), method: :delete,
+                    form: { data: { turbo_confirm: "¿Eliminar esta boleta?" } } %>
+    </li>
+  <% end %>
+</ul>
