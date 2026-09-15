@@ -20,7 +20,8 @@ datos con Gemini, revisar el resultado y guardarlo en PostgreSQL.
    ```
 
 3. Configura las credenciales de PostgreSQL en `config/database.yml` o mediante
-   las variables que use tu entorno.
+   las variables que use tu entorno. En desarrollo puedes definir
+   `POSTGRES_PASSWORD`; en producción Rails utiliza `DATABASE_URL`.
 4. Configura la API key de Gemini. En PowerShell:
 
    ```powershell
@@ -42,6 +43,36 @@ datos con Gemini, revisar el resultado y guardarlo en PostgreSQL.
    ```
 
    Visita <http://localhost:3000>.
+
+## Producción
+
+La aplicación está desplegada en Render:
+
+- Aplicación: <https://boletas-ruby-nico.onrender.com>
+- Base de datos: PostgreSQL administrado por Render
+
+Para configurar el servicio de producción se deben definir las siguientes
+variables de entorno en Render:
+
+- `DATABASE_URL`: Internal Database URL de la base PostgreSQL de Render.
+- `RAILS_MASTER_KEY`: contenido de `config/master.key`.
+- `GEMINI_API_KEY`: clave privada de la API de Gemini.
+- `GEMINI_MODEL`: opcional; por defecto `gemini-3.6-flash`.
+- `RAILS_ENV`: `production`.
+
+El comando de construcción ejecuta las migraciones y la compilación de assets:
+
+```bash
+bundle install && bundle exec rails assets:precompile && bundle exec rails db:prepare
+```
+
+La aplicación se inicia con:
+
+```bash
+bundle exec puma -C config/puma.rb
+```
+
+No se deben subir al repositorio `config/master.key` ni claves de API.
 
 ## Flujo de uso
 
